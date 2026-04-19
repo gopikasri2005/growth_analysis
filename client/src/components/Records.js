@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import DashboardLayout from "./DashboardLayout";
 import { Modal, Button, Form } from "react-bootstrap";
+import { API_URL } from "../api";
 import Layout from "./Layout";
 /* ===============================
    Skill-based Gradients
@@ -55,20 +55,26 @@ const Records = () => {
   const token = localStorage.getItem("token");
 
   const fetchRecords = async () => {
-    const res = await axios.get("http://localhost:5000/api/records", {
+    const res = await axios.get(`${API_URL}/api/records`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     setRecords(res.data);
   };
 
   useEffect(() => {
-    fetchRecords();
-  }, []);
+    const loadRecords = async () => {
+      const res = await axios.get(`${API_URL}/api/records`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setRecords(res.data);
+    };
+    loadRecords();
+  }, [token]);
 //new markcomplete
   const markComplete = async (id, subtopic) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/records/${id}/complete`,
+        `${API_URL}/api/records/${id}/complete`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -80,7 +86,7 @@ const Records = () => {
 //end of markcomplete
   const deleteRecord = async (id) => {
     if (!window.confirm("Delete this topic?")) return;
-    await axios.delete(`http://localhost:5000/api/records/${id}`, {
+    await axios.delete(`${API_URL}/api/records/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     fetchRecords();
@@ -93,7 +99,7 @@ const Records = () => {
 
   const handleEditSave = async () => {
     await axios.put(
-      `http://localhost:5000/api/records/${editData._id}`,
+      `${API_URL}/api/records/${editData._id}`,
       {
         subtopic: editData.subtopic,
         startDate: editData.startDate,
@@ -269,7 +275,7 @@ onClick={() => markComplete(r._id, r.subtopic)}                      >
               if (noteFile) fd.append('file', noteFile);
 
               const token = localStorage.getItem('token');
-              await axios.post('http://localhost:5000/api/notes', fd, {
+              await axios.post(`${API_URL}/api/notes`, fd, {
                 headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
               });
 

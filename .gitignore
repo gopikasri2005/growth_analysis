@@ -24,3 +24,4 @@ yarn-error.log*
 coverage/
 .pnp
 .pnp.js
+server/uploads/

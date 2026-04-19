@@ -5,7 +5,7 @@ export const roadmapData = [
     subtopics: [
       "HTML: Semantic tags, Forms & inputs, Links, images, tables",
       "CSS: Box model, Flexbox, Grid, Positioning, display, Transitions, animations",
-      "JavaScript: Variables, data types, operators, Loops, conditionals, functions, Arrays, objects, maps, sets, DOM manipulation, Events & event listeners, ES6+ features, Promises, async/await"
+      "JavaScript fundamentals: Variables, data types, operators, Loops, conditionals, functions, Arrays, objects, maps, sets, DOM manipulation, Events & event listeners, ES6+ features, Promises, async/await"
     ]
   },
   {

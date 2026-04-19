@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../api";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const SignupPage = () => {
     e.preventDefault();
     setError(""); setSuccess("");
     try {
-      const res = await axios.post("http://localhost:5000/api/signup", { name, email, password });
+      const res = await axios.post(`${API_URL}/api/signup`, { name, email, password });
       localStorage.setItem("token", res.data.token);
       setSuccess("Signed up successfully! Redirecting to login...");
       setTimeout(() => navigate("/login"), 1500);

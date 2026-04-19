@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import DashboardLayout from "./DashboardLayout";
 import { Modal, Button, Card } from "react-bootstrap";
 import Layout from "./Layout";
+import { API_URL } from "../api";
 const Practice = () => {
   const [completed, setCompleted] = useState([]);
   const [ideas, setIdeas] = useState([]);
@@ -11,20 +11,20 @@ const Practice = () => {
 
   const token = localStorage.getItem("token");
 
-  const fetchCompleted = async () => {
+  const fetchCompleted = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/records", {
+      const res = await axios.get(`${API_URL}/api/records`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCompleted(res.data.filter((r) => r.completed));
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     fetchCompleted();
-  }, []);
+  }, [fetchCompleted]);
 
   const handlePractice = (topic) => {
     setIdeasError("");

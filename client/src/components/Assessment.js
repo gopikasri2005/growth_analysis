@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../api";
 import Sidebar from "./Sidebar";
 import Layout from "./Layout";
+
+const topics = ["frontend", "react", "backend", "database"];
+
 const Assessment = () => {
 
   const navigate = useNavigate();
-
-  const topics = ["frontend", "react", "backend", "database"];
 
   const [status, setStatus] = useState({});
 
@@ -24,7 +26,7 @@ const Assessment = () => {
         try {
 
           const res = await axios.get(
-            `http://localhost:5000/api/assessment/status/${topic}`,
+            `${API_URL}/api/assessment/status/${topic}`,
             {
               headers: { Authorization: `Bearer ${token}` }
             }
@@ -46,7 +48,7 @@ const Assessment = () => {
 
     fetchStatus();
 
-  }, []);
+  }, [token]);
 
   return (
 

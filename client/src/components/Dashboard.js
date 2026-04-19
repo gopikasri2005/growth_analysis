@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Layout from "./Layout";
+import { API_URL } from "../api";
 
 const Dashboard = () => {
 
@@ -10,7 +11,7 @@ const Dashboard = () => {
   useEffect(() => {
 
     axios
-      .get("http://localhost:5000/api/dashboard", {
+      .get(`${API_URL}/api/dashboard`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(res => setData(res.data))

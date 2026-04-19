@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import Layout from "./Layout";
 import { Card, Button, ProgressBar, Badge } from "react-bootstrap";
 import jsPDF from "jspdf";
+import { API_URL } from "../api";
 const AssessmentTest = () => {
   const { topic } = useParams();
   const [questions, setQuestions] = useState([]);
@@ -14,11 +15,12 @@ const AssessmentTest = () => {
   const token = localStorage.getItem("token");
 
   /* ================= FETCH QUESTIONS ================= */
+  
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/assessment/${topic}`,
+          `${API_URL}/api/assessment/${topic}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setQuestions(res.data.questions);
@@ -28,7 +30,20 @@ const AssessmentTest = () => {
       }
     };
     fetchQuestions();
-  }, [topic]);
+  }, [topic, token]);
+
+  const handleSubmit = useCallback(async () => {
+    try {
+      const res = await axios.post(
+        `${API_URL}/api/assessment/submit`,
+        { topic, answers, questions },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setResult(res.data);
+    } catch (err) {
+      console.error("Submit failed", err);
+    }
+  }, [topic, answers, questions, token]);
 
   /* ================= TIMER ================= */
   useEffect(() => {
@@ -44,7 +59,7 @@ const AssessmentTest = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [time, result]);
+  }, [time, result, handleSubmit]);
 
   const formatTime = () => {
     const m = Math.floor(time / 60);
@@ -59,19 +74,6 @@ const AssessmentTest = () => {
     setAnswers(newAnswers);
   };
 
-  /* ================= SUBMIT ================= */
-  const handleSubmit = async () => {
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/assessment/submit",
-        { topic, answers, questions },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setResult(res.data);
-    } catch (err) {
-      console.error("Submit failed", err);
-    }
-  };
   //certificate//
 const generateCertificate = () => {
   const doc = new jsPDF("landscape");

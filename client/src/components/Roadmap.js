@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import DashboardLayout from "./DashboardLayout";
 import { roadmapData } from "./RoadmapData";
 import { Accordion, Card, Button, Form, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import Layout from "./Layout";
+import { API_URL } from "../api";
 const Roadmap = () => {
   const token = localStorage.getItem("token");
 
@@ -34,7 +34,7 @@ const Roadmap = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/records",
+        `${API_URL}/api/records`,
         {
           skill: category,
           subtopic,

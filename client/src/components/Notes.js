@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { Form, Button, Card, ListGroup } from "react-bootstrap";
 import Layout from "./Layout";
+import { API_URL } from "../api";
 
 const Notes = () => {
 
@@ -16,13 +17,13 @@ const Notes = () => {
 
   /* ================= FETCH NOTES ================= */
 
-  const fetchNotes = async () => {
+  const fetchNotes = useCallback(async () => {
 
     if (!token) return;
 
     try {
 
-      const res = await axios.get("http://localhost:5000/api/notes", {
+      const res = await axios.get(`${API_URL}/api/notes`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -35,11 +36,11 @@ const Notes = () => {
 
     }
 
-  };
+  }, [token]);
 
   useEffect(() => {
     fetchNotes();
-  }, []);
+  }, [fetchNotes]);
 
   /* ================= SAVE NOTE ================= */
 
@@ -66,7 +67,7 @@ const Notes = () => {
       }
 
       await axios.post(
-        "http://localhost:5000/api/notes",
+        `${API_URL}/api/notes`,
         fd,
         {
           headers: {
@@ -101,7 +102,7 @@ const Notes = () => {
 
     try {
 
-      await axios.delete(`http://localhost:5000/api/notes/${id}`, {
+      await axios.delete(`${API_URL}/api/notes/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -122,7 +123,7 @@ const Notes = () => {
     try {
 
       const res = await axios.get(
-        `http://localhost:5000/api/notes/${note._id}/file`,
+        `${API_URL}/api/notes/${note._id}/file`,
         {
           headers: { Authorization: `Bearer ${token}` },
           responseType: "blob"

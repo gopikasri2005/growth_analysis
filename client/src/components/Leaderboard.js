@@ -7,7 +7,7 @@ const Leaderboard = () => {
 
   useEffect(() => {
 
-    axios.get("http://localhost:5000/api/leaderboard")
+    axios.get(`${API_URL}/api/leaderboard`)
       .then((res) => {
         setUsers(res.data);
       })
